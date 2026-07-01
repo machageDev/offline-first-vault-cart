@@ -1,39 +1,49 @@
 import 'package:equatable/equatable.dart';
 
-
 class CartItem extends Equatable {
   final String productId;
-  final int quantity;
-  final double price;
   final String name;
-  final String crptographicSignature;
-
+  final double price;
+  final int quantity;
+  final String cryptographicSignature;
 
   const CartItem({
     required this.productId,
-    required this.quantity,
+    required this.name,
     required this.price,
-    required this.name, 
-    required this.crptographicSignature,
+    required this.quantity,
+    this.cryptographicSignature = '',
   });
 
+  /// Business Rule: A calculated getter to compute the total cost of this item 
+  /// block inside memory space without allowing external mutations.
   double get totalItemPrice => price * quantity;
 
-  @override
-  List<Object?> get props => [productId, quantity, price, name, crptographicSignature];
+  /// Business Rule: Creates a modified duplicate instance of the entity. 
+  /// Because fields are final, this is the only legitimate way to mutate a 
+  /// state (e.g., changing quantity) without breaking structural immutability.
   CartItem copyWith({
     String? productId,
-    int? quantity,
-    double? price,
     String? name,
-    String? crptographicSignature,
+    double? price,
+    int? quantity,
+    String? cryptographicSignature,
   }) {
     return CartItem(
       productId: productId ?? this.productId,
-      quantity: quantity ?? this.quantity,
-      price: price ?? this.price,
       name: name ?? this.name,
-      crptographicSignature: crptographicSignature ?? this.crptographicSignature,
+      price: price ?? this.price,
+      quantity: quantity ?? this.quantity,
+      cryptographicSignature: cryptographicSignature ?? this.cryptographicSignature,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        productId,
+        name,
+        price,
+        quantity,
+        cryptographicSignature,
+      ];
 }
